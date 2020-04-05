@@ -2,7 +2,7 @@
   "profiles": {
     "FileRenamer": {
       "commandName": "Project",
-      "commandLineArgs": "file1 file2 file3 file4"
+      "workingDirectory": "C:\\File Renamer\\Testing"
     }
   }
 }

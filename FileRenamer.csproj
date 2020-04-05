@@ -9,4 +9,12 @@
     <PackageReference Include="CommandLineParser" Version="2.6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Testing\test.2019.whatever.1080p.mkv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Testing\test.2019.whatever.1080p.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

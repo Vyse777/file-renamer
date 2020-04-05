@@ -1,4 +1,4 @@
 ﻿Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\Auto File Rename\command]
-@="C:\\Custom Executables\\FileRenamer\\FileRenamer.exe"
+@="C:\\File\ Renamer\\FileRenamer.exe"
