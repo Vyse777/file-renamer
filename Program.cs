@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -7,13 +8,22 @@ namespace FileRenamer
 {
     internal class Program
     {
+        private static readonly List<string> supportedFileTypes = new List<string>()
+        {
+            ".mkv",
+            ".mp4"
+        };
+
         private static void Main(string[] args)
         {
-            var filenames = Directory.GetFiles(Environment.CurrentDirectory).Select(x => Path.GetFileName(x)).Where(filename => filename.ToLowerInvariant().Substring(filename.Length - 4).Equals(".mkv"));
+            // TODO: Handle TV Shows. The convention is {showname}.s{seasonNumber}.e{episodeNumber}.{videoQuality}.whatever.{fileType}
+            var filenames = Directory.GetFiles(Environment.CurrentDirectory).Select(x => Path.GetFileName(x)).Where(filename => IsSupportedFileType(filename.ToLowerInvariant().Substring(filename.Length - 4)));
             foreach (var filename in filenames)
             {
                 var filenameParts = filename.Split('.');
                 if (filenameParts.Length == 2) return; // Do nothing if the file has already been renamed
+
+                var fileType = filenameParts[filenameParts.Length - 1];
 
                 for (int i = 0; i < filenameParts.Length; i++)
                 {
@@ -28,7 +38,7 @@ namespace FileRenamer
                         var formattedYear = $"({filenameParts[i]})";
 
                         // Rename the file and move on to the next mkv.
-                        TryRenameFile(filename, string.Join(" ", newFilenameParts.Append(formattedYear)), ".mkv", true);
+                        TryRenameFile(filename, string.Join(" ", newFilenameParts.Append(formattedYear)), fileType, true);
                         break;
                     }
                 }
@@ -46,7 +56,7 @@ namespace FileRenamer
 
             try
             {
-                File.Move(oldFilename, filePath + fileTypePostfix);
+                File.Move(oldFilename, filePath + '.' + fileTypePostfix);
             }
             catch (IOException e)
             {
@@ -55,6 +65,11 @@ namespace FileRenamer
                 File.WriteAllText(Environment.CurrentDirectory + "\\ErrorWhenAutoRenaming.txt",
                     $"An error occurred when trying to rename \"{oldFilename}\" to \"{newFilename}\" A file with that name might already exist");
             }
+        }
+
+        private static bool IsSupportedFileType(string fileType)
+        {
+            return supportedFileTypes.Contains(fileType);
         }
     }
 }
